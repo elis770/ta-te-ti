@@ -1,0 +1,89 @@
+/* Fondo de la página con un degradado vertical que usa tres colores */
+body {
+  background: linear-gradient(to bottom, #66d1ff, #66ffcc, #66ff96);
+}
+
+/* Contenedor principal ".g" (usado en el HTML) */
+.g {
+  font-family: "Cascadia Code", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 100vh; /*los cuatro anteriores hacen que se aline el texto al centro*/
+  position: relative;
+}
+
+/* Estilo del título principal (#titulo) */
+#titulo {
+  font-size: 5vh;
+  text-align: center; /*texto al centro*/
+  position: absolute; /*posision diferente al resto del .g para  que quede alineado arriba */
+  top: 50px;
+}
+
+/* Contenedor del menú o mensaje inicial */
+#diseñores {
+  text-align: center;
+  position: absolute;
+  top: 150px;
+  margin-top: 5vh; /*5vh del contenido anterior*/
+}
+
+/* Estilo del mensaje de victoria o empate */
+#mensaje {
+  background-color: #0ebd83;
+  font-size: 3vh; /*tamaño de letra*/
+  max-width: 800px;
+  height: auto;
+  padding: 20px; /*para que haya espacio entre la caja y lo de adentro*/
+  text-align: center;
+  border-radius: 15px;
+}
+
+/* Botón para reiniciar el juego */
+.reinicio {
+  font-family: "Cascadia Code", sans-serif;
+  background-color: rgb(31, 50, 3);
+  color: white;
+  font-size: 3vh;
+  width: 400px;
+  height: 50px;
+  margin-top: 70px;
+  border-radius: 15px;
+  border: none; /*para que no tengan bordes entre si los cuadrados*/
+  transition: background-color 0.3s ease; /*hacer trancision de colores*/
+}
+
+/* Efecto al pasar el ratón sobre el botón */
+.reinicio:hover {
+  background-color: #319171;
+  color: white;
+}
+
+/* Estilo de la tabla del tablero */
+table {
+  border-collapse: collapse; /*juntar los cuadrados*/
+  width: 20%;
+  border-style: hidden; /*ocultar el borde externo*/
+  margin-top: 10vh; /*alejar la tabla de lo de arriba*/
+}
+
+/* Estilo de las celdas de la tabla (casillas visuales del juego) */
+td {
+  border: 6px solid rgba(62, 62, 62, 0.532);
+}
+
+/* Botones invisibles que forman el tablero del juego */
+.boton-invisible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vh;
+  width: 70px;
+  height: 70px;
+  color: rgb(150, 37, 37);
+  font-size: 70px;
+  text-align: center;
+  background-color: rgba(157, 55, 55, 0); /* Fondo completamente transparente */
+  border: none;
+}
