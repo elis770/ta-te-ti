@@ -1,58 +1,101 @@
-// Selecciona el contenedor principal donde inyectaremos todo el contenido del juego
-let g = document.querySelector('.g');
+const miBody = document.querySelector('body');
+let jugadorActual = '✖️';
+document.getElementById('JA').textContent = jugadorActual;
+let esModoComputadora = false;
+let jugandoComputadora = false;
 
-// Inyectamos un mensaje de bienvenida y un botón para comenzar a jugar
-g.innerHTML = `
-  <h1 id="titulo"><u>TIC-TAC-TOE</u></h1>
-  <div id="diseñores">
-    <div id="mensaje">
-      <p>👋 Hola! Bienvenido al juego del TIC-TAC-TOE</p>
-    </div>
-    <button class="reinicio">Vamos a jugar!</button>
-  </div>
-`;
+function changeLetra(letra) {
+  return letra === '✖️' ? '⭕' : '✖️';
+}
 
-// Seleccionamos el botón "Vamos a jugar!" para agregarle un evento click
-let botonJugar = document.querySelector('.reinicio');
+let botonJugar = document.getElementById('contraPersona');
+let botonJugarCompu = document.getElementById('contraCompu');
+const dentroCuadrado = document.querySelectorAll('.boton-invisible');
 
-// Agregamos el evento click al botón, que iniciará el juego (ejecutará la función juegoT)
+dentroCuadrado.forEach((cuadro) =>
+  cuadro.addEventListener('click', () => juegoT(cuadro))
+);
+
+let hayGanador = false;
+
 botonJugar.addEventListener('click', () => {
-  juegoT();
+  reiniciar();
+});
+botonJugarCompu.addEventListener('click', () => {
+  esModoComputadora = true;
+  reiniciar();
 });
 
-// Función principal del juego: crea el tablero y maneja la lógica del turno de los jugadores
-function juegoT() {
-  // Inyectamos el tablero de juego (3x3) en el contenedor principal
-  g.innerHTML = `
-    <h1 id="titulo"><u>TIC-TAC-TOE</u></h1>
-    <table>
-      <tbody>
-        <tr>
-          <td><button class="boton-invisible"></button></td>
-          <td><button class="boton-invisible"></button></td>
-          <td><button class="boton-invisible"></button></td>
-        </tr>
-        <tr>
-          <td><button class="boton-invisible"></button></td>
-          <td><button class="boton-invisible"></button></td>
-          <td><button class="boton-invisible"></button></td>
-        </tr>
-        <tr>
-          <td><button class="boton-invisible"></button></td>
-          <td><button class="boton-invisible"></button></td>
-          <td><button class="boton-invisible"></button></td>
-        </tr>
-      </tbody>
-    </table>
-  `;
+function reiniciar() {
+  miBody.setAttribute('data-tag', 'jugar');
+  dentroCuadrado.forEach((cuadro) => {
+    cuadro.innerHTML = '';
+    cuadro.classList.remove('ganador');
+    cuadro.disabled = false;
+  });
+  jugadorActual = '✖️';
+  hayGanador = false;
+  document.getElementById('JA').textContent = jugadorActual;
+  document.getElementById('error-mensaje').textContent = '';
+}
 
-  // Seleccionamos todos los botones del tablero (casillas)
-  let dentroCuadrado = document.querySelectorAll('.boton-invisible');
+function turnoComputadora() {
+  jugandoComputadora = true;
+  document.getElementById('computadora-pensando').style.display = 'block';
+  setTimeout(() => {
+    let casillaVacias = [];
+    dentroCuadrado.forEach((cuadro, i) => {
+      if (cuadro.innerHTML === '') {
+        casillaVacias.push(i);
+      }
+    });
+    if (casillaVacias.length === 0) {
+      jugandoComputadora = false;
+      document.getElementById('computadora-pensando').style.display = 'none';
+      return;
+    }
 
-  // Variable que indica quién juega primero ('✖️' o '⭕')
-  let jugadorActual = '✖️';
+    const indiceAleatorio = Math.floor(Math.random() * casillaVacias.length);
+    const posicionElegida = casillaVacias[indiceAleatorio];
+    dentroCuadrado[posicionElegida].innerHTML = '⭕';
+    jugandoComputadora = false;
+    document.getElementById('computadora-pensando').style.display = 'none';
+    calculoGanador('⭕');
+    jugadorActual = changeLetra(jugadorActual);
+    document.getElementById('JA').textContent = jugadorActual;
+  }, 1000);
+}
 
-  // Lista de combinaciones ganadoras posibles (índices de las casillas)
+function juegoT(cuadro) {
+  if (hayGanador || [...dentroCuadrado].every((c) => c.innerHTML !== '')) {
+    return;
+  }
+
+  if (jugandoComputadora) {
+    return;
+  }
+
+  if (cuadro.innerHTML !== '') {
+    document.getElementById('error-mensaje').textContent =
+      '⚠️ Elija otra casilla';
+    return;
+  } else {
+    const jugadorEnTurno = jugadorActual;
+    cuadro.innerHTML = jugadorEnTurno;
+    calculoGanador(jugadorEnTurno);
+    if (hayGanador || [...dentroCuadrado].every((c) => c.innerHTML !== '')) {
+      return;
+    }
+    jugadorActual = changeLetra(jugadorActual);
+    document.getElementById('JA').textContent = jugadorActual;
+
+    if (jugadorActual === '⭕' && esModoComputadora) {
+      turnoComputadora();
+    }
+  }
+}
+let valorA, valorB, valorC;
+function calculoGanador(jugadorEnTurno) {
   const combinacionesGanadoras = [
     [0, 1, 2],
     [3, 4, 5],
@@ -63,71 +106,41 @@ function juegoT() {
     [0, 4, 8],
     [2, 4, 6],
   ];
-
-  // Recorremos cada casilla del tablero para agregarle un evento click
-  dentroCuadrado.forEach((cuadro) => {
-    cuadro.addEventListener('click', () => {
-      // Si ya tiene una ficha, no permite sobreescribirla
-      if (cuadro.innerHTML !== '') {
-        console.error('Elija otra casilla');
-        return;
-      }
-
-      // Asigna la ficha del jugador actual a la casilla seleccionada
-      cuadro.innerHTML = jugadorActual;
-
-      // Variable para saber si hay un ganador después de esta jugada
-      let hayGanador = false;
-
-      // Verifica todas las combinaciones ganadoras
-      for (let i = 0; i < combinacionesGanadoras.length; i++) {
-        const [a, b, c] = combinacionesGanadoras[i];
-
-        // Obtiene el valor de las tres casillas de la combinación actual
-        const valorA = dentroCuadrado[a].innerHTML;
-        const valorB = dentroCuadrado[b].innerHTML;
-        const valorC = dentroCuadrado[c].innerHTML;
-
-        // Si las tres son iguales y no están vacías → hay ganador
-        if (valorA === valorB && valorB === valorC && valorA !== '') {
-          hayGanador = true;
-          break;
-        }
-      }
-
-      // Si hay ganador, mostramos el mensaje y desactivamos las casillas
-      if (hayGanador) {
-        g.innerHTML = `<h1 id="titulo"><u>TIC-TAC-TOE</u></h1> 
-          <div id="diseñores">
-            <div id="mensaje">🎉 Ganó el jugador ${jugadorActual} 😄🎉</div>
-            <button class="reinicio" onclick="vacio()">Volver a jugar</button>
-          </div>`;
-        dentroCuadrado.forEach((c) => (c.disabled = true));
-        return;
-      }
-
-      // Si no hay ganador y todas las casillas están llenas → es empate
-      if (
-        hayGanador === false &&
-        [...dentroCuadrado].every((cuadro) => cuadro.innerHTML !== '')
-      ) {
-        g.innerHTML =
-          '<h1 id="titulo"><u>TIC-TAC-TOE</u></h1> <div id="diseñores"><div id="mensaje"> <p>⚠️ Es un Empate. </p></div> <button class="reinicio" onclick = "vacio()"> Volver a jugar</button></div>';
-      }
-
-      // Cambia al otro jugador para el siguiente turno
-      jugadorActual = change(jugadorActual);
-    });
-  });
+  for (let i = 0; i < combinacionesGanadoras.length; i++) {
+    let [a, b, c] = combinacionesGanadoras[i];
+    valorA = dentroCuadrado[a].innerHTML;
+    valorB = dentroCuadrado[b].innerHTML;
+    valorC = dentroCuadrado[c].innerHTML;
+    if (valorA === valorB && valorB === valorC && valorA !== '') {
+      hayGanador = true;
+      dentroCuadrado[a].classList.add('ganador');
+      dentroCuadrado[b].classList.add('ganador');
+      dentroCuadrado[c].classList.add('ganador');
+      accionDelJuego(true, jugadorEnTurno);
+      return;
+    }
+  }
+  if (
+    !hayGanador &&
+    [...dentroCuadrado].every((celda) => celda.innerHTML !== '')
+  ) {
+    hayGanador = false;
+    accionDelJuego(false);
+    return;
+  }
 }
 
-// Función para cambiar entre '✖️' y '⭕'
-function change(letra) {
-  return letra === '✖️' ? '⭕' : '✖️';
-}
+function accionDelJuego(g, ganador = '') {
+  if (g === true) {
+    miBody.setAttribute('data-tag', 'ganador');
+    document.getElementById('ganador2').innerText = ganador;
+    dentroCuadrado.forEach((c) => (c.disabled = true));
+    return;
+  }
 
-// Función para reiniciar el juego
-function vacio() {
-  g.innerHTML = '';
-  juegoT(); // Ejecuta de nuevo el juego desde el principio
+  if (g === false) {
+    miBody.setAttribute('data-tag', 'empate');
+    dentroCuadrado.forEach((c) => (c.disabled = true));
+    return;
+  }
 }

@@ -1,79 +1,96 @@
-/* Fondo de la página con un degradado vertical que usa tres colores */
-body {
-  background: linear-gradient(to bottom, #66d1ff, #66ffcc, #66ff96);
+/* Ocultar todo por defecto */
+#bienvenida, #tabla, #turno, #ganador, #empate, #volverJuego {
+  display: none;
 }
 
-/* Contenedor principal ".g" (usado en el HTML) */
-.g {
+/* Mostrar según estado */
+[data-tag="inicio"] #bienvenida {
+  display: block;
+}
+
+[data-tag="jugar"] #tabla,
+[data-tag="jugar"] #turno {
+  display: block;
+}
+
+[data-tag="ganador"] #tabla,
+[data-tag="ganador"] #ganador,
+[data-tag="ganador"] #volverJuego {
+  display: block;
+}
+
+[data-tag="empate"] #tabla,
+[data-tag="empate"] #empate,
+[data-tag="empate"] #volverJuego {
+  display: block;
+}
+
+body {
+  background: linear-gradient(to bottom, #66d1ff, #66ffcc, #66ff96);
   font-family: "Cascadia Code", sans-serif;
   display: flex;
   justify-content: center;
-  align-items: center; 
-  height: 100vh; /*los cuatro anteriores hacen que se aline el texto al centro*/
+  align-items: center;
   position: relative;
+  height: 100vh;
 }
 
-/* Estilo del título principal (#titulo) */
 #titulo {
   font-size: 5vh;
-  text-align: center; /*texto al centro*/
-  position: absolute; /*posision diferente al resto del .g para  que quede alineado arriba */
-  top: 50px;
-}
-
-/* Contenedor del menú o mensaje inicial */
-#diseñores {
   text-align: center;
   position: absolute;
-  top: 150px;
-  margin-top: 5vh; /*5vh del contenido anterior*/
+  top: 25px;
 }
 
-/* Estilo del mensaje de victoria o empate */
 #mensaje {
   background-color: #0ebd83;
-  font-size: 3vh; /*tamaño de letra*/
+  font-size: 3vh;
   max-width: 800px;
   height: auto;
-  padding: 20px; /*para que haya espacio entre la caja y lo de adentro*/
+  padding: 20px;
   text-align: center;
   border-radius: 15px;
 }
 
-/* Botón para reiniciar el juego */
+#w{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
 .reinicio {
   font-family: "Cascadia Code", sans-serif;
   background-color: rgb(31, 50, 3);
-  color: white;
+  color: greenyellow;
   font-size: 3vh;
-  width: 400px;
+  width: 60vh;
   height: 50px;
-  margin-top: 70px;
+  margin-top: 5vh;
   border-radius: 15px;
-  border: none; /*para que no tengan bordes entre si los cuadrados*/
-  transition: background-color 0.3s ease; /*hacer trancision de colores*/
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Efecto al pasar el ratón sobre el botón */
-.reinicio:hover {
+#wa{
+  background-color: rgb(73, 121, 1);
+  color: rgb(187, 230, 124);
+}
+.reinicio:hover, #wa:hover {
   background-color: #319171;
   color: white;
 }
 
-/* Estilo de la tabla del tablero */
 table {
-  border-collapse: collapse; /*juntar los cuadrados*/
-  width: 20%;
-  border-style: hidden; /*ocultar el borde externo*/
-  margin-top: 10vh; /*alejar la tabla de lo de arriba*/
+  border-collapse: collapse;
+  border-style: hidden;
+  margin-top: 25vh;
 }
 
-/* Estilo de las celdas de la tabla (casillas visuales del juego) */
 td {
   border: 6px solid rgba(62, 62, 62, 0.532);
 }
 
-/* Botones invisibles que forman el tablero del juego */
 .boton-invisible {
   display: flex;
   justify-content: center;
@@ -84,54 +101,41 @@ td {
   color: rgb(150, 37, 37);
   font-size: 70px;
   text-align: center;
-  background-color: rgba(157, 55, 55, 0); /* Fondo completamente transparente */
+  background-color: rgba(157, 55, 55, 0);
   border: none;
+  cursor: pointer;
 }
-@media screen and (max-width: 600px) {
-  .g {
-    flex-direction: column;
-    padding: 20px;
-  }
 
-  #mensaje {
-    font-size: 4vw;
-    max-width: 90%;
-  }
-
-  .reinicio {
-    width: 90%;
-    font-size: 4vw;
-    margin-top: 30px;
-  }
-
-  .boton-invisible {
-    font-size: 50px;
-    width: 50px;
-    height: 50px;
-  }
-  table {
-    width: 80%;
-    margin-top: 5vh;
-  }
+.mensaje2 {
+  text-align: center;
+  position: absolute;
+  margin-top: 10vh;
+  margin-left: 8vh;
+  font-size: 2vh;
+  background-color: #0ebd83;
+  width: 400px;
+  height: 50px;
+  padding: 3px;
+  border-radius: 15px;
 }
-@media screen and (max-width: 300px) {
-  #mensaje {
-    font-size: 5vw;
-    padding: 10px;
-  }
 
-  .reinicio {
-    font-size: 5vw;
-    margin-top: 20px;
-  }
+#r4 .reinicio {
+  margin-left: 0.1vh;
+}
 
-  .boton-invisible {
-    font-size: 40px;
-    width: 40px;
-    height: 40px;
-  }
-
-  table {
-    width: 90%;
-  }
+#error-mensaje {
+  color: red;
+  margin-top: 35px;
+}
+.ganador {
+  background-color: #74cf74 !important;
+}
+.pensando {
+  display: none;
+  font-size: 2vh;
+  color: #007700;
+  background-color: #dfffdf;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-top: 10px;
 }
