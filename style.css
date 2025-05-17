@@ -1,5 +1,10 @@
 /* Ocultar todo por defecto */
-#bienvenida, #tabla, #turno, #ganador, #empate, #volverJuego {
+#bienvenida,
+#tabla,
+#turno,
+#ganador,
+#empate,
+#volverJuego {
   display: none;
 }
 
@@ -52,31 +57,41 @@ body {
   border-radius: 15px;
 }
 
-#w{
+#botonOpcion {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
 }
+
 .reinicio {
   font-family: "Cascadia Code", sans-serif;
-  background-color: rgb(31, 50, 3);
-  color: greenyellow;
   font-size: 3vh;
-  width: 60vh;
-  height: 50px;
-  margin-top: 5vh;
   border-radius: 15px;
   border: none;
   cursor: pointer;
+}
+
+#contraPersona {
+  width: 60vh;
+  height: 50px;
+  margin-top: 5vh;
+  background-color: rgb(31, 50, 3);
+  color: greenyellow;
   transition: background-color 0.3s ease;
 }
 
-#wa{
+#contraCompuint {
+  width: 60vh;
+  height: 50px;
+  margin-top: 5vh;
   background-color: rgb(73, 121, 1);
   color: rgb(187, 230, 124);
+  transition: background-color 0.3s ease;
 }
-.reinicio:hover, #wa:hover {
+
+#contraPersona:hover,
+#contraCompuint:hover {
   background-color: #319171;
   color: white;
 }
@@ -101,7 +116,7 @@ td {
   color: rgb(150, 37, 37);
   font-size: 70px;
   text-align: center;
-  background-color: rgba(157, 55, 55, 0);
+  background-color: rgba(55, 157, 132, 0.26);
   border: none;
   cursor: pointer;
 }
@@ -119,17 +134,41 @@ td {
   border-radius: 15px;
 }
 
-#r4 .reinicio {
-  margin-left: 0.1vh;
+#volverJuego {
+  display: none;
+  text-align: center;
+  margin-top: 20px;
+  border: none;
+  outline: none;
+  margin-top: 4.5vh;
+}
+
+#volverJuego button.reinicio {
+  border: none;
+  outline: none;
+  background-color: rgb(5, 82, 95);
+  color: greenyellow;
+  font-size: 3vh;
+  width: auto;
+  padding: 10px 20px;
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+}
+
+#volverJuego button.reinicio:hover {
+  background-color:  rgb(44, 147, 165);
+  color: white;
 }
 
 #error-mensaje {
   color: red;
   margin-top: 35px;
 }
+
 .ganador {
   background-color: #74cf74 !important;
 }
+
 .pensando {
   display: none;
   font-size: 2vh;
