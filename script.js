@@ -184,7 +184,7 @@ dentroCuadrado.forEach((cuadro) =>
   cuadro.addEventListener('click', () => juegoT(cuadro))
 );
 
-//funcon del juego
+//PARTE 3. funcion del juego
 function juegoT(cuadro) {
   //si se da algunas condiciones, parar el juego
   if (hayGanador || [...dentroCuadrado].every((c) => c.innerHTML !== '')) {
@@ -215,20 +215,7 @@ function juegoT(cuadro) {
   }
 }
 
-//fotografia del tablero
-function combinacionesActuales() {
-  let resultado = []; //array de las pocisiones actuales del tablero
-  for (let i = 0; i < combinacionesGanadoras.length; i++) {
-    //recoremos el array de opciones ganadoras
-    let [a, b, c] = combinacionesGanadoras[i];
-    let valorA = dentroCuadrado[a].innerHTML || ' '; //conseguimos los valor de las 3 partes tanto en vertical/horizontal/diagonales
-    let valorB = dentroCuadrado[b].innerHTML || ' ';
-    let valorC = dentroCuadrado[c].innerHTML || ' ';
-    resultado.push(valorA + valorB + valorC); //me retorna un array con todas las pocisiones
-  }
-  return resultado;
-}
-
+//PARTE 4. los desenlaces del juego
 function calculoGanador(jugadorEnTurno) {
   comb = combinacionesActuales(); // comb = array con cada línea del tablero
 
